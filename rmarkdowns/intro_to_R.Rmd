@@ -106,7 +106,17 @@ my_age + 5 # how old will you be in 5 years?
 ```
 
 #### <span style="color: red;">Challenge 1</span>
-Create a my_name variable with your name assigned to the variable instead of "Victoria DelaCruz". Then, create a my_age variable with your age. 
+Create a my_name variable with your name assigned to the variable instead of "Victoria DelaCruz". Then, create a my_age variable with your age.
+
+```{r}
+#challenge # 1
+my_name <- "Johnny T. Aldan"
+my_age = 33
+my_age
+
+my_age + 5
+```
+
 
 #### Different Types of Data
 
@@ -165,6 +175,13 @@ It's important to name your variables wisely. Here are some naming recommendatio
 
 ##### Creating New Variables
 
+```{r}
+my_college <- "CUH"
+my_grad_year <- 2014
+my_college
+my_grad_year
+```
+
 After you read in your dataset and assign it to a variable (which we're going to do in a bit), the next step is to manipulate, clean, and subset your data. As you start to play around with your data, it's recommended to assign the clean or modified version of your data to a new variable. 
 
 In other words, it's good practice to keep your original dataset in the event you need to refer to it in the future.
@@ -189,6 +206,7 @@ library(here) # allows us to cut out long file paths, ensures reproducibility
 library(janitor) # helps us clean column names
 ```
 
+
 Note: **You will most likely get an error.** If you get an error about not having these packages installed, run the install.packages("packagename") code in the console. We went over this on line 48 under the *Installing a Package* header
 
 Example of this kind of error pictured here:
@@ -202,12 +220,14 @@ In the code chunk below, we use the `read_csv()` function to read in the csv fil
   
     - This also **ensures reproducibility** because as long as we share R projects on github, our project directories will always be the same
 ```{r, message=FALSE}
-sdr_data <- read_csv(here("data/SDR-2023-Data.csv")) # assigning the dataset to a variable so that we can look at/reference it
+sdr_data <- read.csv(here("data/SDR-2023-Data.csv")) # assigning the dataset to a variable so that we can look at/reference it
 # to view the whole dataset you can click on sdr_data in your environment pane at the top right of your screen)
+View(sdr_data)
 ```
+
 Cleaning names
 ```{r}
-sdr_data <- clean_names(sdr_data) # cleaning column names 
+sdr_data <- clean_names(sdr_data) # cleaning column names
 ```
 
 Note: In programming, we don't use spaces in names (usually, if you want to use a space between words, you'd use an underscore, slash, or other punctuation). That's why we used the `clean_names` function from the `janitor` package, to clean our column names and replace spaces with underscores.
@@ -294,6 +314,13 @@ What if we want to subset specific rows? We can do this by using the filter func
 #### <span style="color: red;">Challenge 2</span>
 Using the `select()` function, select two new SDG goal scores. Assign it to a variable named `SDG_scores`. 
 
+```{r}
+#challenge 2
+sdr_data %>%
+  select(goal_5_score, goal_7_score)
+```
+
+
 *2. filter()*
 
 Similarly to select, `filter()` can be used to extract specific rows. Let's try this out by filtering our data for those within the Oceania region.
@@ -312,7 +339,13 @@ Notes:
 - In the filter example we just did, we are filtering for Regions that are EQUAL to "Oceania", hence the two equal signs. 
 
 #### <span style="color: red;">Challenge 3</span>
-Using the `filter()` function, filter for another region other than Oceania. Assign it to a variable named `new_region`. 
+Using the `filter()` function, filter for another region other than Oceania. Assign it to a variable named `new_region`.
+
+```{r}
+sdr_data %>%
+filter(regions_used_for_the_sdr == "Sub-Saharan Africa")
+```
+
 
 **Important**
 
@@ -338,7 +371,7 @@ Now, you will have a dataframe called *oceania_data* in your environment pane (t
 ```{r}
 sdr_data %>% 
   group_by(regions_used_for_the_sdr) %>% 
-  summarise(mean_goal_7_score_by_region = mean(population_using_at_least_basic_drinking_water_services_percent))
+  summarise(mean_goal_7_score_by_region = mean(population_using_at_least_basic_drinking_water_services))
 ```
 
 
@@ -350,10 +383,9 @@ In the pivot_longer function, we input the names of the columns to pivot (in thi
 
 ```{r}
 sdr_data %>% 
-  select(country, population_with_access_to_clean_fuels_and_technology_for_cooking_percent, co2_emissions_from_fuel_combustion_per_total_electricity_output_mt_co2_t_wh, population_with_access_to_electricity_percent, renewable_energy_share_in_total_final_energy_consumption_percent) %>%
+  select(country, population_with_access_to_clean_fuels_and_technology_for_cooking, co_emissions_from_fuel_combustion_per_total_electricity_output_mt_co_t_wh, population_with_access_to_electricity, renewable_energy_share_in_total_final_energy_consumption) %>%
   pivot_longer(cols = -country, names_to = "Indicator") # cols = -country means to pivot every column selected other than country
 ```
-
 
 ### For Next Session - Different Types of Graphs
 
